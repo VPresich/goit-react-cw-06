@@ -1,12 +1,14 @@
-import styles from './App.module.css';
-import { DiApple } from 'react-icons/di';
+import { Layout } from './Layout/Layout';
+import { AppBar } from './AppBar/AppBar';
+import { TaskForm } from './TaskForm/TaskForm';
+import { TaskList } from './TaskList/TaskList';
 
-export function App() {
+export const App = () => {
   return (
-    <div className={styles.container}>
-      <h1>
-        <DiApple /> Vite + React Template
-      </h1>
-    </div>
+    <Layout>
+      <AppBar />
+      <TaskForm />
+      <TaskList />
+    </Layout>
   );
-}
+};
