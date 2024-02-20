@@ -1,4 +1,5 @@
 import { statusFilters } from './constants';
+import { createReducer } from '@reduxjs/toolkit';
 
 import {
   addTask,
@@ -15,40 +16,33 @@ const tasksInitialState = [
   { id: 4, text: 'Build amazing apps', completed: false },
 ];
 
-export const tasksReducer = (state = tasksInitialState, action) => {
-  switch (action.type) {
-    case addTask.type:
+export const tasksReducer = createReducer(tasksInitialState, builder => {
+  builder
+    .addCase(addTask, (state, action) => {
       return [...state, action.payload];
-
-    case deleteTask.type:
+    })
+    .addCase(deleteTask, (state, action) => {
       return state.filter(task => task.id !== action.payload);
-
-    case toggleCompleted.type:
+    })
+    .addCase(toggleCompleted, (state, action) => {
       return state.map(task => {
         if (task.id !== action.payload) {
           return task;
         }
         return { ...task, completed: !task.completed };
       });
-
-    default:
-      return state;
-  }
-};
+    });
+});
 
 const filtersInitialState = {
   status: statusFilters.all,
 };
 
-export const filtersReducer = (state = filtersInitialState, action) => {
-  switch (action.type) {
-    case setStatusFilter.type:
-      return {
-        ...state,
-        status: action.payload,
-      };
-
-    default:
-      return state;
-  }
-};
+export const filtersReducer = createReducer(filtersInitialState, builder => {
+  builder.addCase(setStatusFilter.type, (state, action) => {
+    return {
+      ...state,
+      status: action.payload,
+    };
+  });
+});
