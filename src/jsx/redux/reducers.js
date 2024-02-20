@@ -19,18 +19,19 @@ const tasksInitialState = [
 export const tasksReducer = createReducer(tasksInitialState, builder => {
   builder
     .addCase(addTask, (state, action) => {
-      return [...state, action.payload];
+      state.push(action.payload);
     })
     .addCase(deleteTask, (state, action) => {
-      return state.filter(task => task.id !== action.payload);
+      const index = state.findIndex(task => task.id === action.payload);
+      state.splice(index, 1);
     })
     .addCase(toggleCompleted, (state, action) => {
-      return state.map(task => {
-        if (task.id !== action.payload) {
-          return task;
+      for (const task of state) {
+        if (task.id === action.payload) {
+          task.completed = !task.completed;
+          break;
         }
-        return { ...task, completed: !task.completed };
-      });
+      }
     });
 });
 
@@ -40,9 +41,6 @@ const filtersInitialState = {
 
 export const filtersReducer = createReducer(filtersInitialState, builder => {
   builder.addCase(setStatusFilter.type, (state, action) => {
-    return {
-      ...state,
-      status: action.payload,
-    };
+    state.status = action.payload;
   });
 });
